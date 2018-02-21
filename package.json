@@ -1,0 +1,19 @@
+{
+    "name": "action-series-files",
+    "version": "1.0.0",
+    "description": "Action series for Files. Used in the D2L-to-Canvas Converstion tool.",
+    "main": "template-files.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/byuitechops/action-series-files.git"
+    },
+    "author": "Zachary Williams",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/byuitechops/action-series-files/issues"
+    },
+    "homepage": "https://github.com/byuitechops/action-series-files#readme"
+}
