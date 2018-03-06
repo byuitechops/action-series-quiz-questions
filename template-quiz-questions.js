@@ -3,7 +3,7 @@ const canvas = require('canvas-wrapper');
 
 /* Actions */
 var actions = [
-    // require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-questions-delete.js'),
 ];
 
 class TechOps {
@@ -51,14 +51,12 @@ function buildPutObj(question) {
         'question': {
             'question_name': question.question_name,
             'question_text': question.question_text,
-            // 'quiz_group_id': question.quiz_group_id,     // not included in get request, fyi
             'question_type': question.question_type,
             'position': question.position,
             'points_possible': question.points_possible,
             'correct_comments': question.correct_comments,
             'incorrect_comments': question.incorrect_comments,
             'neutral_comments': question.neutral_comments,
-            // 'text_after_answers': question.text_after_answers,   // not included in get request, fyi
             'answers': question.answers,
         }
     };
