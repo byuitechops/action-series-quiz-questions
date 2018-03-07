@@ -1,10 +1,10 @@
 /* Dependencies */
 const canvas = require('canvas-wrapper');
+const asyncLib = require('async');
 
 /* Actions */
 var actions = [
     require('./actions/quiz-questions-delete.js'),
-    require('./actions/quiz-questions-clean-rel-attributes.js'),
 ];
 
 class TechOps {
@@ -18,7 +18,6 @@ class TechOps {
         this.getID = getID;
         this.delete = false;
         this.type = 'Quiz Question';
-        this.quiz_id = this.quiz_id;
     }
 }
 
@@ -29,18 +28,45 @@ class TechOps {
 
 /* Retrieve all items of the type */
 function getItems(course, callback) {
+    var quizQuestions = [];
+    var quizList = [];
+
     /* Get all of the quiz questions from Canvas */
-    canvas.getQuizQuestions(course.info.canvasOU, (err, items) => {
+    function getQuizQuestions(quiz, eachCallback) {
+        canvas.getQuizQuestions(course.info.canvasOU, quiz.id, (eachErr, items) => {
+            if (eachErr) {
+                course.error(eachErr);
+                eachCallback(null);
+                return;
+            }
+            /* Add on the quiz questions to our growing list */
+            quizQuestions = quizQuestions.concat(items);
+            eachCallback(null);
+        });
+    }
+
+    /* Get all of the quizzes */
+    canvas.getQuizzes(course.info.canvasOU, (err, quizzes) => {
         if (err) {
             callback(err);
             return;
         }
-        /* Give each item the TechOps helper class */
-        items.forEach(it => {
-            it.techops = new TechOps();
-        });
 
-        callback(null, items);
+        quizList = quizzes;
+
+        /* For each quiz, get the quiz questions */
+        asyncLib.each(quizzes, getQuizQuestions, (err) => {
+            if (err) {
+                course.error(err);
+            }
+
+            /* Give each item the TechOps helper class */
+            quizQuestions.forEach(item => {
+                item.techops = new TechOps();
+            });
+
+            callback(null, quizQuestions);
+        });
     });
 }
 
@@ -81,7 +107,7 @@ function putItem(course, question, callback) {
         return;
     }
     var putObj = buildPutObj(question);
-    canvas.put(`/api/v1/courses/${course.info.canvasOU}/quizzes/${question.techops.quiz_id}/questions/${question.id}`, putObj, (err, newItem) => {
+    canvas.put(`/api/v1/courses/${course.info.canvasOU}/quizzes/${question.quiz_id}/questions/${question.id}`, putObj, (err, newItem) => {
         if (err) {
             callback(err);
             return;
