@@ -4,6 +4,7 @@ const canvas = require('canvas-wrapper');
 /* Actions */
 var actions = [
     require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-questions-clean-rel-attributes.js'),
 ];
 
 class TechOps {
