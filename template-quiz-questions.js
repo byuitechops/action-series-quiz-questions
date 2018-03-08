@@ -4,7 +4,8 @@ const asyncLib = require('async');
 
 /* Actions */
 var actions = [
-    require('./actions/quiz-questions-delete.js'),
+    // require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-questions-broken-quicklinks.js'),
 ];
 
 class TechOps {
@@ -117,11 +118,11 @@ function putItem(course, question, callback) {
 }
 
 function getHTML(item) {
-    return null;
+    return item.question_text;
 }
 
 function setHTML(item, newHTML) {
-    return null;
+    item.question_text = newHTML;
 }
 
 function getTitle(item) {
