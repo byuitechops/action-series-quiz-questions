@@ -5,6 +5,7 @@ const asyncLib = require('async');
 /* Actions */
 var actions = [
     require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-match-swap.js'),
 ];
 
 class TechOps {
@@ -72,7 +73,7 @@ function getItems(course, callback) {
 
 /* Build the PUT object for an item */
 function buildPutObj(question) {
-    return {
+    var obj = {
         'quiz_id': question.quiz_id, // required
         'id': question.id, // required
         'question': {
@@ -87,6 +88,18 @@ function buildPutObj(question) {
             'answers': question.answers,
         }
     };
+
+    if (question.question_type === 'matching_question' &&
+        question.matching &&
+        question.matching_answer_incorrect_matches) {
+
+            obj.question.matching = question.matching;
+            obj.question.matching_answer_incorrect_matches = question.matching_answer_incorrect_matches;
+    }
+
+    console.log(`OBJ: ${JSON.stringify(obj)}`);
+
+    return obj; 
 }
 
 /****** BETA: This API endpoint is not finalized, and there could be breaking changes before its final release. - Canvas API Documentation ******/
