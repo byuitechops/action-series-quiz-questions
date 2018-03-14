@@ -5,7 +5,7 @@ const asyncLib = require('async');
 /* Actions */
 var actions = [
     require('./actions/quiz-questions-delete.js'),
-    require('./actions/quiz-match-swap.js'),
+    // require('./actions/quiz-match-swap.js'),
 ];
 
 class TechOps {
@@ -17,8 +17,13 @@ class TechOps {
         this.getTitle = getTitle;
         this.setTitle = setTitle;
         this.getID = getID;
+        this.logs = [];
         this.delete = false;
         this.type = 'Quiz Question';
+    }
+
+    log(title, details) {
+        this.logs.push({ title, details });
     }
 }
 
