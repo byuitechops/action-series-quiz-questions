@@ -4,7 +4,7 @@ const asyncLib = require('async');
 
 /* Actions */
 var actions = [
-    require('./actions/quiz-questions-delete.js'),
+    // require('./actions/quiz-questions-delete.js'),
     require('./actions/quiz-match-swap.js'),
 ];
 
@@ -96,8 +96,6 @@ function buildPutObj(question) {
             obj.question.matching = question.matching;
             obj.question.matching_answer_incorrect_matches = question.matching_answer_incorrect_matches;
     }
-
-    console.log(`OBJ: ${JSON.stringify(obj)}`);
 
     return obj; 
 }
