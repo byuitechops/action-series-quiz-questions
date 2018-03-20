@@ -40,7 +40,7 @@ module.exports = (course, question, callback) => {
      * calls the appropriate function to apply the fix to.
      ************************************************************/
     function beginProcess() {
-        course.message(`Identified matching quiz question.`);
+        question.techops.message(`Identified matching quiz question.`);
 
         var isMultipleAnswersSame = false;      //for logging purposes. 
         var answersArray = [];                  // for answers array object in QuizQuestion
@@ -78,7 +78,7 @@ module.exports = (course, question, callback) => {
         //throw warning so humans can check out the quiz to ensure that there is no bugs and make sure 
         //that all of the answers for the questions are correct.
         if (isMultipleAnswersSame) {
-            course.warning(`Multiple questions have the same answer. All of the questions and answers has been swapped. Due to various reasons, the answers may not match. It is best that you check through the quiz.`);
+            question.techops.warning(`Multiple questions have the same answer. All of the questions and answers has been swapped. Due to various reasons, the answers may not match. It is best that you check through the quiz.`);
         }
 
         //flatten array and prep the question object for Canvas injection
@@ -87,7 +87,7 @@ module.exports = (course, question, callback) => {
         question.matching_answer_incorrect_matches = distractors;
 
         //logging for report
-        course.log(`Quiz Question Swapping`, {
+        question.techops.log(`Quiz Question Swapping`, {
             'ID': question.id,
             'Title': question.question_name
         });

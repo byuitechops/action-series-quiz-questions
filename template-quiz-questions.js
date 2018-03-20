@@ -5,6 +5,7 @@ const asyncLib = require('async');
 /* Actions */
 var actions = [
     require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-questions-broken-quicklinks.js'),
     require('./actions/quiz-match-swap.js'),
 ];
 
@@ -24,6 +25,18 @@ class TechOps {
 
     log(title, details) {
         this.logs.push({ title, details });
+    }
+
+    message(message) {
+        this.logs.push({ title: 'message', details: { message: message }});
+    }
+
+    warning(warning) {
+        this.logs.push({ title: 'warning', details: { warning: warning }});
+    }
+
+    error(error) {
+        this.logs.push({ error: error });
     }
 }
 
