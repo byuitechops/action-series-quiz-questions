@@ -6,10 +6,10 @@ Array.prototype.clone = function (arr) {
     //https://jsperf.com/new-array-vs-splice-vs-slice/19
     if (arr instanceof Array) {
         return this.push(arr.splice(0));
-    } else if (typeof arr === "undefined") {
-        throw "ERROR: the array you are trying to clone is undefined.";
+    } else if (typeof arr === 'undefined') {
+        throw 'ERROR: the array you are trying to clone is undefined.';
     } else {
-        throw "ERROR: ${arr} is not an array.";
+        throw 'ERROR: ${arr} is not an array.';
     }
 }
 
@@ -40,7 +40,7 @@ module.exports = (course, question, callback) => {
      * calls the appropriate function to apply the fix to.
      ************************************************************/
     function beginProcess() {
-        course.message(`Identified matching quiz question.`);
+        course.message('Identified matching quiz question.');
 
         var isMultipleAnswersSame = false;      //for logging purposes. 
         var answersArray = [];                  // for answers array object in QuizQuestion
@@ -52,21 +52,21 @@ module.exports = (course, question, callback) => {
         question.answers.forEach(answer => {
             //don't want to create a question when there is no question 
             //this applies to questions that has more answers than questions
-            if (typeof answer.right === "undefined") {
+            if (typeof answer.right === 'undefined') {
                 distractors += `${answer.left}\n`;
             } else {
                 //determine if the question is a one-to-one or one-to-many mapping
                 //for answers to questions
                 if (question.answers.length < question.matches.length) {
                     isMultipleAnswersSame = true;
-                    multipleArrays = multipleSameAnswer(answer, avoidDuplicateQuestions);
+                    var multipleArrays = multipleSameAnswer(answer, avoidDuplicateQuestions);
 
                     answersArray.clone(multipleArrays[0]);
                     matchingArray.clone(multipleArrays[1]);
                     distractors += multipleArrays[2];
 
                 } else {
-                    uniqueArrays = uniqueAnswer(answer);
+                    var uniqueArrays = uniqueAnswer(answer);
 
                     answersArray.clone(uniqueArrays[0]);
                     matchingArray.clone(uniqueArrays[1]);
@@ -78,7 +78,7 @@ module.exports = (course, question, callback) => {
         //throw warning so humans can check out the quiz to ensure that there is no bugs and make sure 
         //that all of the answers for the questions are correct.
         if (isMultipleAnswersSame) {
-            course.warning(`Multiple questions have the same answer. All of the questions and answers has been swapped. Due to various reasons, the answers may not match. It is best that you check through the quiz.`);
+            course.warning('Multiple questions have the same answer. All of the questions and answers has been swapped. Due to various reasons, the answers may not match. It is best that you check through the quiz.');
         }
 
         //flatten array and prep the question object for Canvas injection
@@ -87,7 +87,7 @@ module.exports = (course, question, callback) => {
         question.matching_answer_incorrect_matches = distractors;
 
         //logging for report
-        course.log(`Quiz Question Swapping`, {
+        question.techops.log('Quiz Question Swapping', {
             'ID': question.id,
             'Title': question.question_name
         });
@@ -153,11 +153,11 @@ module.exports = (course, question, callback) => {
         });
 
         //go through each matches and begins the swapping
-        for (index in question.matches) {
+        for (let index in question.matches) {
             //don't want duplicate questions
             //this also handles the questions where there are more answers than questions
             if (!avoidDuplicateQuestions.includes(question.matches[index].text) &&
-                typeof question.matches[index].text != "undefined") {
+                typeof question.matches[index].text != 'undefined') {
                 answersArray.push({
                     'answer_text': answer.text,
                     'id': answer.id,
@@ -174,6 +174,6 @@ module.exports = (course, question, callback) => {
             }
         }
 
-        return [answersArray, matchingArray, distractors]; 
+        return [answersArray, matchingArray, distractors];
     }
 }

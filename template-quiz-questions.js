@@ -35,8 +35,6 @@ class TechOps {
 /* Retrieve all items of the type */
 function getItems(course, callback) {
     var quizQuestions = [];
-    var quizList = [];
-
     /* Get all of the quiz questions from Canvas */
     function getQuizQuestions(quiz, eachCallback) {
         canvas.getQuizQuestions(course.info.canvasOU, quiz.id, (eachErr, items) => {
@@ -98,11 +96,11 @@ function buildPutObj(question) {
         question.matching &&
         question.matching_answer_incorrect_matches) {
 
-            obj.question.matching = question.matching;
-            obj.question.matching_answer_incorrect_matches = question.matching_answer_incorrect_matches;
+        obj.question.matching = question.matching;
+        obj.question.matching_answer_incorrect_matches = question.matching_answer_incorrect_matches;
     }
-
-    return obj; 
+    console.log(obj);
+    return obj;
 }
 
 /****** BETA: This API endpoint is not finalized, and there could be breaking changes before its final release. - Canvas API Documentation ******/
