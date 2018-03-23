@@ -4,7 +4,9 @@
     "description": "Action series for quiz questions. Used in the D2L-to-Canvas Converstion tool.",
     "main": "template-quiz-questions.js",
     "dependencies": {
-        "canvas-wrapper": "github:byuitechops/canvas-wrapper"
+        "canvas-wrapper": "github:byuitechops/canvas-wrapper",
+        "async": "^2.6.0",
+        "cheerio": "^1.0.0-rc.2"
     },
     "devDependencies": {},
     "scripts": {

@@ -1,8 +1,8 @@
-module.exports = (course, file, callback) => {
+module.exports = (course, question, callback) => {
 
     /* If the item is marked for deletion, do nothing */
-    if (file.techops.delete == true) {
-        callback(null, course, file);
+    if (question.techops.delete == true) {
+        callback(null, course, question);
         return;
     }
 
@@ -13,22 +13,22 @@ module.exports = (course, file, callback) => {
     ];
 
     /* The test returns TRUE or FALSE - action() is called if true */
-    var found = doomedItems.find(item => item.test(file.display_name));
+    var found = doomedItems.find(item => item.test(question.display_name));
 
     /* This is the action that happens if the test is passed */
     function action() {
-        file.techops.delete = true;
-        course.log('Files Deleted', {
-            'Title': file.display_name,
-            'ID': file.id
+        question.techops.delete = true;
+        question.techops.log('Files Deleted', {
+            'Title': question.display_name,
+            'ID': question.id
         });
-        callback(null, course, file);
+        callback(null, course, question);
     }
 
     if (found != undefined) {
         action();
     } else {
-        callback(null, course, file);
+        callback(null, course, question);
     }
 
 };

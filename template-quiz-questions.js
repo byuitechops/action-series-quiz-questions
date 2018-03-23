@@ -1,9 +1,12 @@
 /* Dependencies */
 const canvas = require('canvas-wrapper');
+const asyncLib = require('async');
 
 /* Actions */
 var actions = [
-    // require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-questions-broken-quicklinks.js'),
+    require('./actions/quiz-match-swap.js'),
 ];
 
 class TechOps {
@@ -15,9 +18,25 @@ class TechOps {
         this.getTitle = getTitle;
         this.setTitle = setTitle;
         this.getID = getID;
+        this.logs = [];
         this.delete = false;
         this.type = 'Quiz Question';
-        this.quiz_id = this.quiz_id;
+    }
+
+    log(title, details) {
+        this.logs.push({ title, details });
+    }
+
+    message(message) {
+        this.logs.push({ title: 'message', details: { message: message }});
+    }
+
+    warning(warning) {
+        this.logs.push({ title: 'warning', details: { warning: warning }});
+    }
+
+    error(error) {
+        this.logs.push({ error: error });
     }
 }
 
@@ -28,40 +47,73 @@ class TechOps {
 
 /* Retrieve all items of the type */
 function getItems(course, callback) {
+    var quizQuestions = [];
     /* Get all of the quiz questions from Canvas */
-    canvas.getQuizQuestions(course.info.canvasOU, (err, items) => {
+    function getQuizQuestions(quiz, eachCallback) {
+        canvas.getQuizQuestions(course.info.canvasOU, quiz.id, (eachErr, items) => {
+            if (eachErr) {
+                course.error(eachErr);
+                eachCallback(null);
+                return;
+            }
+            /* Add on the quiz questions to our growing list */
+            quizQuestions = quizQuestions.concat(items);
+            eachCallback(null);
+        });
+    }
+
+    /* Get all of the quizzes */
+    canvas.getQuizzes(course.info.canvasOU, (err, quizzes) => {
         if (err) {
             callback(err);
             return;
         }
-        /* Give each item the TechOps helper class */
-        items.forEach(it => {
-            it.techops = new TechOps();
-        });
 
-        callback(null, items);
+        quizList = quizzes;
+
+        /* For each quiz, get the quiz questions */
+        asyncLib.each(quizzes, getQuizQuestions, (err) => {
+            if (err) {
+                course.error(err);
+            }
+
+            /* Give each item the TechOps helper class */
+            quizQuestions.forEach(item => {
+                item.techops = new TechOps();
+            });
+
+            callback(null, quizQuestions);
+        });
     });
 }
 
 /* Build the PUT object for an item */
 function buildPutObj(question) {
-    return {
+    var obj = {
         'quiz_id': question.quiz_id, // required
         'id': question.id, // required
         'question': {
             'question_name': question.question_name,
             'question_text': question.question_text,
-            // 'quiz_group_id': question.quiz_group_id,     // not included in get request, fyi
             'question_type': question.question_type,
             'position': question.position,
             'points_possible': question.points_possible,
             'correct_comments': question.correct_comments,
             'incorrect_comments': question.incorrect_comments,
             'neutral_comments': question.neutral_comments,
-            // 'text_after_answers': question.text_after_answers,   // not included in get request, fyi
             'answers': question.answers,
         }
     };
+
+    if (question.question_type === 'matching_question' &&
+        question.matching &&
+        question.matching_answer_incorrect_matches) {
+
+        obj.question.matching = question.matching;
+        obj.question.matching_answer_incorrect_matches = question.matching_answer_incorrect_matches;
+    }
+    console.log(obj);
+    return obj;
 }
 
 /****** BETA: This API endpoint is not finalized, and there could be breaking changes before its final release. - Canvas API Documentation ******/
@@ -82,7 +134,7 @@ function putItem(course, question, callback) {
         return;
     }
     var putObj = buildPutObj(question);
-    canvas.put(`/api/v1/courses/${course.info.canvasOU}/quizzes/${question.techops.quiz_id}/questions/${question.id}`, putObj, (err, newItem) => {
+    canvas.put(`/api/v1/courses/${course.info.canvasOU}/quizzes/${question.quiz_id}/questions/${question.id}`, putObj, (err, newItem) => {
         if (err) {
             callback(err);
             return;
