@@ -112,7 +112,6 @@ function buildPutObj(question) {
         obj.question.matching = question.matching;
         obj.question.matching_answer_incorrect_matches = question.matching_answer_incorrect_matches;
     }
-    console.log(obj);
     return obj;
 }
 
