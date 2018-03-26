@@ -4,8 +4,9 @@ const asyncLib = require('async');
 
 /* Actions */
 var actions = [
-    // require('./actions/quiz-questions-delete.js'),
+    require('./actions/quiz-questions-delete.js'),
     require('./actions/quiz-questions-broken-quicklinks.js'),
+    require('./actions/quiz-match-swap.js'),
 ];
 
 class TechOps {
@@ -17,8 +18,25 @@ class TechOps {
         this.getTitle = getTitle;
         this.setTitle = setTitle;
         this.getID = getID;
+        this.logs = [];
         this.delete = false;
         this.type = 'Quiz Question';
+    }
+
+    log(title, details) {
+        this.logs.push({ title, details });
+    }
+
+    message(message) {
+        this.logs.push({ title: 'message', details: { message: message }});
+    }
+
+    warning(warning) {
+        this.logs.push({ title: 'warning', details: { warning: warning }});
+    }
+
+    error(error) {
+        this.logs.push({ error: error });
     }
 }
 
@@ -30,8 +48,6 @@ class TechOps {
 /* Retrieve all items of the type */
 function getItems(course, callback) {
     var quizQuestions = [];
-    var quizList = [];
-
     /* Get all of the quiz questions from Canvas */
     function getQuizQuestions(quiz, eachCallback) {
         canvas.getQuizQuestions(course.info.canvasOU, quiz.id, (eachErr, items) => {
@@ -73,7 +89,7 @@ function getItems(course, callback) {
 
 /* Build the PUT object for an item */
 function buildPutObj(question) {
-    return {
+    var obj = {
         'quiz_id': question.quiz_id, // required
         'id': question.id, // required
         'question': {
@@ -88,6 +104,15 @@ function buildPutObj(question) {
             'answers': question.answers,
         }
     };
+
+    if (question.question_type === 'matching_question' &&
+        question.matching &&
+        question.matching_answer_incorrect_matches) {
+
+        obj.question.matching = question.matching;
+        obj.question.matching_answer_incorrect_matches = question.matching_answer_incorrect_matches;
+    }
+    return obj;
 }
 
 /****** BETA: This API endpoint is not finalized, and there could be breaking changes before its final release. - Canvas API Documentation ******/

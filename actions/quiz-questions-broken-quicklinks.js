@@ -66,7 +66,7 @@ module.exports = (course, question, callback) => {
                 /* Link is likely broken if it includes 'quickLink' in the href attribute */
                 if ($(link).attr('href').includes('quickLink')) {
                     /* Log it to the console and our report */
-                    course.log(`${question.techops.type} - D2L QuickLinks Logged`, {
+                    question.techops.log(`${question.techops.type} - D2L QuickLinks Logged`, {
                         'Title': question.techops.getTitle(question),
                         'Question ID': question.techops.getID(question),
                         'Quiz ID': question.quiz_id,
