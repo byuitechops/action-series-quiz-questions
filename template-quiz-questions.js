@@ -6,7 +6,7 @@ const asyncLib = require('async');
 var actions = [
     require('./actions/quiz-questions-delete.js'),
     require('./actions/quiz-questions-broken-quicklinks.js'),
-    require('./actions/quiz-match-swap.js'),
+    require('./actions/quiz-questions-match-swap.js'),
 ];
 
 class TechOps {
