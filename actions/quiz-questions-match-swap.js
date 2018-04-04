@@ -40,8 +40,6 @@ module.exports = (course, question, callback) => {
      * calls the appropriate function to apply the fix to.
      ************************************************************/
     function beginProcess() {
-        question.techops.message('Identified matching quiz question.');
-
         var isMultipleAnswersSame = false;      //for logging purposes. 
         var answersArray = [];                  // for answers array object in QuizQuestion
         var matchingArray = [];                 // array of objects for QuizQuestion
