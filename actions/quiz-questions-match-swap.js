@@ -19,11 +19,15 @@ module.exports = (course, question, callback) => {
         'matching_question'
     ];
 
+    var validPlatforms = [
+        'online'
+    ];
+
     //do not need to do anything if it is not the question
     //we need to work with or the quiz is going to be deleted.
     if (question.techops.delete === true ||
         !questionTypes.includes(question.question_type) ||
-        course.settings.platform === 'campus') {
+        !validPlatforms.includes(course.settings.platform)) {
 
         callback(null, course, question);
         return;
