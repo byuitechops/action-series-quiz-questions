@@ -14,6 +14,10 @@ Array.prototype.clone = function (arr) {
 }
 
 module.exports = (course, question, callback) => {
+    //only add the platforms your grandchild should run in
+    var validPlatforms = ['online', 'pathway', 'campus'];
+    var validPlatform = validPlatforms.includes(course.settings.platform);
+    
     //made for flexibility
     var questionTypes = [
         'matching_question'
@@ -22,7 +26,8 @@ module.exports = (course, question, callback) => {
     //do not need to do anything if it is not the question
     //we need to work with or the quiz is going to be deleted.
     if (question.techops.delete === true ||
-        !questionTypes.includes(question.question_type)) {
+        !questionTypes.includes(question.question_type) ||
+        validPlatform !== true) {
 
         callback(null, course, question);
         return;
@@ -40,11 +45,11 @@ module.exports = (course, question, callback) => {
      * calls the appropriate function to apply the fix to.
      ************************************************************/
     function beginProcess() {
-        var isMultipleAnswersSame = false;      //for logging purposes. 
-        var answersArray = [];                  // for answers array object in QuizQuestion
-        var matchingArray = [];                 // array of objects for QuizQuestion
-        var avoidDuplicateQuestions = [];       //create this here so we don't lose the data we get
-        var distractors = '';                   // string for all incorrect answers in the dropdown
+        var isMultipleAnswersSame = false; //for logging purposes. 
+        var answersArray = []; // for answers array object in QuizQuestion
+        var matchingArray = []; // array of objects for QuizQuestion
+        var avoidDuplicateQuestions = []; //create this here so we don't lose the data we get
+        var distractors = ''; // string for all incorrect answers in the dropdown
 
         //checking through the answers object
         question.answers.forEach(answer => {
@@ -103,9 +108,9 @@ module.exports = (course, question, callback) => {
      * mapping for each answer to each question.
      ************************************************************/
     function uniqueAnswer(answer) {
-        var distractors = '';       //the items the dropdown will be populated with
-        var answersArray = [];      //array of all answers for QuizQuestion object
-        var matchingArray = [];     //array of objects for quizQuestion
+        var distractors = ''; //the items the dropdown will be populated with
+        var answersArray = []; //array of all answers for QuizQuestion object
+        var matchingArray = []; //array of objects for quizQuestion
 
         answersArray.push({
             'answer_text': answer.text,
@@ -135,10 +140,10 @@ module.exports = (course, question, callback) => {
      * correct matches, the XML for a specific quiz must be parsed.
      ************************************************************/
     function multipleSameAnswer(answer, avoidDuplicateQuestions) {
-        var distractors = '';       //the items the dropdown will be populated with
-        var distractorsArray = [];  //array consisting of ALL distractors
-        var answersArray = [];      //array of all answers for QuizQuestion object
-        var matchingArray = [];     //array of objects for quizQuestion
+        var distractors = ''; //the items the dropdown will be populated with
+        var distractorsArray = []; //array consisting of ALL distractors
+        var answersArray = []; //array of all answers for QuizQuestion object
+        var matchingArray = []; //array of objects for quizQuestion
 
         //prepare the dropdown to be populated with all of the answers
         //so this goes through and gets them all 
