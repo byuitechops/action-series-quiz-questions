@@ -22,7 +22,8 @@ module.exports = (course, question, callback) => {
     //do not need to do anything if it is not the question
     //we need to work with or the quiz is going to be deleted.
     if (question.techops.delete === true ||
-        !questionTypes.includes(question.question_type)) {
+        !questionTypes.includes(question.question_type) ||
+        course.settings.platform === 'campus') {
 
         callback(null, course, question);
         return;
