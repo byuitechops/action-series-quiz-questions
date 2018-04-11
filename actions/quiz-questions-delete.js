@@ -1,3 +1,9 @@
+/******************************************************************************
+ * Quiz Questions Delete
+ * Description: Create an array of quiz question titles and set their delete 
+ * attribute on the TechOps class to true. If the delete attribute is set to 
+ * true, the quiz question will be deleted in action-series-master main.js 
+ ******************************************************************************/
 module.exports = (course, question, callback) => {
     //only add the platforms your grandchild should run in
     var validPlatforms = ['online', 'pathway', 'campus'];
