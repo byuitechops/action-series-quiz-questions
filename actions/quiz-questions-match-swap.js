@@ -1,3 +1,19 @@
+/***********************************************************
+ * Grandchild description
+ * 
+ * Since the matching questions and answers get swapped during
+ * Canvas import, this grandchild goes through each quiz 
+ * question and checks to see if it is a matching question. 
+ * If it is not, it will move on; otherwise, it will go ahead
+ * and swap the questions and answers. 
+ * 
+ * WARNING: Some questions (like upper-level CS courses) have
+ * one to many mapping so humans must fix this issue. In order
+ * to implement this fix through code, several layers of XML
+ * parsing must be done and the time that is to be spent doing
+ * that will hold back the whole project.
+ ***********************************************************/
+
 //perform a *destructive* deep copy from one array to another
 //working example: https://jsfiddle.net/jnpscauo/12/
 Array.prototype.clone = function (arr) {
@@ -23,12 +39,15 @@ module.exports = (course, question, callback) => {
         'matching_question'
     ];
 
+    var validPlatforms = [
+        'online'
+    ];
+
     //do not need to do anything if it is not the question
     //we need to work with or the quiz is going to be deleted.
     if (question.techops.delete === true ||
         !questionTypes.includes(question.question_type) ||
         validPlatform !== true) {
-
         callback(null, course, question);
         return;
     } else {
