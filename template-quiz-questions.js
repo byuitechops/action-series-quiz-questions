@@ -7,7 +7,6 @@ var actions = [
     require('./actions/quiz-questions-delete.js'),
     require('./actions/quiz-questions-broken-quicklinks.js'),
     require('./actions/quiz-questions-match-swap.js'),
-    require('./actions/quiz-questions-align-point-values.js'),
 ];
 
 class TechOps {
