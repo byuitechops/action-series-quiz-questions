@@ -8,7 +8,9 @@
         "async": "^2.6.0",
         "cheerio": "^1.0.0-rc.2"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "tap": "^10.7.3"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
