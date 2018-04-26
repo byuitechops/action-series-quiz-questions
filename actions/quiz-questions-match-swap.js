@@ -200,7 +200,7 @@ module.exports = (course, question, callback) => {
             return [answersArray, matchingArray, distractors];
         }
     } catch (e) {
-        course.error(e);
+        course.error(new Error(e));
         callback(null, course, question);
     }
 };
