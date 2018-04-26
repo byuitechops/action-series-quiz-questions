@@ -92,7 +92,7 @@ module.exports = (course, question, callback) => {
 
         action();
     } catch (e) {
-        course.error(e);
+        course.error(new Error(e));
         callback(null, course, question);
     }
 };
