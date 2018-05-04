@@ -5,7 +5,6 @@ const asyncLib = require('async');
 /* Actions */
 var actions = [
     require('./actions/quiz-questions-delete.js'),
-    require('./actions/quiz-questions-broken-quicklinks.js'),
     require('./actions/quiz-questions-match-swap.js'),
 ];
 
