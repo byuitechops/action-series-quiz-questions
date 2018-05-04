@@ -74,7 +74,7 @@ module.exports = (course, question, callback) => {
             if (links.length !== 0) {
                 links.forEach(link => {
                     /* Link is likely broken if it includes 'quickLink' in the href attribute */
-                    if ($(link).attr('href').includes('quickLink')) {
+                    if ($(link).attr('href') && $(link).attr('href').includes('quickLink')) {
                         /* Log it to the console and our report */
                         question.techops.log(`${question.techops.type} - D2L QuickLinks`, {
                             'Title': question.techops.getTitle(question),
