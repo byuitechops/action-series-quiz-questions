@@ -31,24 +31,16 @@ Array.prototype.clone = function (arr) {
 
 module.exports = (course, question, callback) => {
     try {
-        //only add the platforms your grandchild should run in
-        var validPlatforms = ['online', 'pathway', 'campus'];
-        var validPlatform = validPlatforms.includes(course.settings.platform);
 
         //made for flexibility
         var questionTypes = [
             'matching_question'
         ];
 
-        var validPlatforms = [
-            'online'
-        ];
-
         //do not need to do anything if it is not the question
         //we need to work with or the quiz is going to be deleted.
         if (question.techops.delete === true ||
-            !questionTypes.includes(question.question_type) ||
-            validPlatform !== true) {
+            !questionTypes.includes(question.question_type)) {
             callback(null, course, question);
             return;
         } else {
